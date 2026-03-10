@@ -24,7 +24,7 @@
         Add a Movie
     </h1>
 
-    <form id="MovieList">
+    <form id="MovieForm">
         <label for="title">Title:</label><br></br>
         <input type="text" id="title" name="title"><br></br>
         <label for="year">Year:</label><br></br>
@@ -43,17 +43,18 @@
             <span class="star" data-value="2">⭐</span>
             <span class="star" data-value="3">⭐</span>
             <span class="star" data-value="4">⭐</span>
-            <span class="star" data-value="5">⭐</span>s
+            <span class="star" data-value="5">⭐</span>
         </div>
     </form>
     <button type="submit">Add Movie</button>
     <h2>
         Movie List
     </h2>
+    <div id="movieList"></div>
     <script>
-        let students = [];
+        let movies = [];
 
-        document.getElementById("MovieList").addEventListener("submit", function(e)) {
+        document.getElementById("MovieForm").addEventListener("submit", function(e)) {
             e.preventDefault();
 
             let title = document.getElementById("title").value;
@@ -61,7 +62,35 @@
             let genre = document.getElementById("genre").value;
             let rating = document.getElementById("rating").value
 
-            let movielist = {title, year, genre, rating}
+            let movIelist = {title, year, genre, rating}
+
+            movies.push(movielist);
+
+            displayMovies();
+        }
+
+        function displayMovies() {
+            const movielist = document.getElementById("movieList");
+            movielist.innerHTML="";
+
+            movies.forEach(function(movIelist)) {
+                const div = document.createElement("div");
+
+                div.textContent = 
+                `${movIelist.title} (${movIelist.year}) - ${movIelist.genre}, Rating: ${}`;
+
+                movielist.appendChild(div);
+            }
+
+        }
+
+        localStorage.setItem("movies", JSON.stringify(movies));
+
+        let savedmovie = localStorage.getItem("movie");
+
+        if (savedmovie) {
+            movies = JSON.parse(savedmovie)
+            displayMovies();
         }
     </script>
     
