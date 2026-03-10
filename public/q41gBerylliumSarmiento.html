@@ -17,6 +17,16 @@
         position: center;
     }
 
+    .stars {
+        font-size: 30px;
+         color: gray;
+        cursor: pointer;
+    }
+
+    .stars.active {
+        color: gold;
+    }
+
 </style>
 
 <body>
@@ -52,6 +62,35 @@
     </h2>
     <div id="movieList"></div>
     <script>
+        const star = document.querySelectorAll(".stars")
+
+        let Rating = 0;
+
+        star.forEach(stars) {
+            star.addEventListener("click", function()) {
+                rating = this.dataset.value;
+
+                updateStars(rating);
+            }
+        }
+
+        function updateStars(rating) {
+
+        stars.forEach(star) {
+
+            if(star.dataset.value <= rating){
+                star.classList.add("active");
+            } 
+            
+            else {
+                star.classList.remove("active");
+            }
+
+        };
+
+        }
+
+
         let movies = [];
 
         document.getElementById("MovieForm").addEventListener("submit", function(e)) {
@@ -60,7 +99,7 @@
             let title = document.getElementById("title").value;
             let year = document.getElementById("year").value;
             let genre = document.getElementById("genre").value;
-            let rating = document.getElementById("rating").value
+            let rating = Rating;
 
             let movIelist = {title, year, genre, rating}
 
@@ -68,6 +107,7 @@
 
             displayMovies();
         }
+
 
         function displayMovies() {
             const movielist = document.getElementById("movieList");
