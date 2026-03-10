@@ -61,24 +61,24 @@
         Movie List
     </h2>
     <div id="movieList"></div>
-    <script>
-        const stars = document.querySelectorAll(".stars")
+    <script src="script.js">
+        const stars = document.querySelectorAll(".star")
 
         let Rating = 0;
 
         stars.forEach(star) {
-            star.addEventListener("click", function()) {
-                rating = this.dataset.value;
+            star.addEventListener("click", function(), console.log("clicked")) {
+                Rating = this.dataset.value;
 
-                updateStars(rating);
+                updateStars(Rating);
             }
         }
 
-        function updateStars(rating) {
+        function updateStars(Rating) {
 
         stars.forEach(star) {
 
-            if(star.dataset.value <= rating){
+            if(star.dataset.value <= Rating){
                 star.classList.add("active");
             } 
             
