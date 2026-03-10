@@ -17,13 +17,13 @@
         position: center;
     }
 
-    .stars {
+    .star {
         font-size: 30px;
          color: gray;
         cursor: pointer;
     }
 
-    .stars.active {
+    .star.active {
         color: gold;
     }
 
@@ -48,12 +48,12 @@
              <option value="horror">Horror</option>
             </select>   
         </label><br/><br/>
-        <div class="stars" id="rating">
-            <span class="star" data-value="1">⭐</span>
-            <span class="star" data-value="2">⭐</span>
-            <span class="star" data-value="3">⭐</span>
-            <span class="star" data-value="4">⭐</span>
-            <span class="star" data-value="5">⭐</span>
+        <div id="rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
         </div>
     </form>
     <button type="submit">Add Movie</button>
@@ -62,11 +62,11 @@
     </h2>
     <div id="movieList"></div>
     <script>
-        const star = document.querySelectorAll(".stars")
+        const stars = document.querySelectorAll(".stars")
 
         let Rating = 0;
 
-        star.forEach(stars) {
+        stars.forEach(star) {
             star.addEventListener("click", function()) {
                 rating = this.dataset.value;
 
