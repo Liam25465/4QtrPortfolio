@@ -131,7 +131,7 @@
       <span class="star" data-value="5">&#9733;</span>
     </div>
     </form>
-    <button onclick="addMovie()">Add Movie</button>
+    <button type="submit">Add Movie</button>
     <h2>Movie List</h2>
     <ul id="movieList"></ul>
     
@@ -155,9 +155,61 @@
         }
         });
 
-        
+const form = document.getElementById("MovieForm");
 
-        window.onload = displayMovies;
+
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+
+            let title = document.getElementById("title").value;
+            let year = document.getElementById("year").value;
+            let genre = document.getElementById("genre").value;
+            let rating = selectedRating;
+
+            let movie = {title, year, genre, rating}
+
+            movies.push(movie);
+
+            localStorage.setItem("movies", JSON.stringify(movies));
+
+            displayMovies();
+
+        });
+
+
+
+
+        let savedmovie = localStorage.getItem("movies");
+
+        if (savedmovie) {
+            movies = JSON.parse(savedmovie)
+        }
+
+    window.onload = displayMovies;
+
+        function displayMovies() {
+
+        let movieList = document.getElementById("movieList");
+
+        movieList.innerHTML = "";
+
+        movies.forEach(movie => {
+
+        let li = document.createElement("li");
+
+        let stars = "⭐".repeat(movie.rating);
+
+        li.textContent =
+         movie.title +
+        " (" + movie.year + ") - " +
+        movie.genre +
+        ", Rating: " + stars;
+
+            movieList.appendChild(li);
+
+        });
+    
+    }
 
 
     }
