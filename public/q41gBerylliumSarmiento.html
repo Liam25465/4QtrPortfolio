@@ -159,13 +159,13 @@ updateStars(selectedRating);
 
 function updateStars(rating){
 
-document.querySelectorAll(".star").forEach(star =>{
+    document.querySelectorAll(".star").forEach(star =>{
 
-star.classList.remove("selected");
+    star.classList.remove("selected");
 
-if(star.getAttribute("data-value") <= rating){
+    if(star.getAttribute("data-value") <= rating){
 
-star.classList.add("selected");
+    star.classList.add("selected");
 
 }
 
@@ -176,28 +176,33 @@ star.classList.add("selected");
 
 function addMovie(){
 
-let title = document.getElementById("title").value;
-let year = document.getElementById("year").value;
-let genre = document.getElementById("genre").value;
-let rating = selectedRating;
+let title=document.getElementById("title").value;
+let year=document.getElementById("year").value;
+let genre=document.getElementById("genre").value;
 
-if(title === "" || year === "" || rating === 0){
-
-alert("Please fill all fields");
-return;
-
+if(title=="" || year=="" || selectedRating==0){
+    alert("Fill all fields");
+    return;
 }
 
-let movie = {
+let existing = movies.find(m => m.title.toLowerCase() === title.toLowerCase());
 
-title:title,
-year:year,
-genre:genre,
-rating:rating
+if(existing){
 
-};
+    existing.year = year;
+    existing.genre = genre;
+    existing.rating = Math.round((existing.rating + selectedRating)/2);
 
-movies.push(movie);
+}else{
+
+    movies.push({
+    title:title,
+    year:year,
+    genre:genre,
+    rating:selectedRating
+});
+
+}
 
 displayMovies();
 
@@ -208,30 +213,39 @@ updateStars(0);
 
 }
 
-
 function displayMovies(){
 
-let list = document.getElementById("movieList");
+    let list=document.getElementById("movieList");
+    list.innerHTML="";
 
-list.innerHTML="";
+    movies.forEach((movie,index)=>{
 
-movies.forEach(movie =>{
+    let li=document.createElement("li");
 
-let li = document.createElement("li");
+    let stars="★".repeat(movie.rating);
 
-let stars = "★".repeat(movie.rating);
+    li.innerHTML =
+    movie.title+" ("+movie.year+") - "+
+    movie.genre+", Rating: "+
+    "<span class='rating-display'>"+stars+"</span>"+
+    " <button class='deleteBtn' onclick='deleteMovie("+index+")'>Delete</button>";
 
-li.innerHTML =
-movie.title +
-" (" + movie.year + ") - " +
-movie.genre +
-", Rating: <span class='rating-display'>" +
-stars +
-"</span>";
-
-list.appendChild(li);
+    list.appendChild(li);
 
 });
+
+}
+
+function deleteMovie(index){
+
+    if(confirm("Are you sure you want to delete?")){
+
+    movies.splice(index,1);
+    displayMovies();
+
+}
+
+
 
 }
 
