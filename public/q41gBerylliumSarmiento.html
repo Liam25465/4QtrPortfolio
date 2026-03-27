@@ -1,66 +1,255 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Q3 2nd Graded Exercise">
-    <meta name="keywords" content="HTML Forms">
-    <meta name="author" content="LJ Sarmiento">
-    <title>Sumthin</title>
-</head>
+<title>My Movies</title>
+
 <style>
-    body {
-        border-collapse: collapse;
-        width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-        position: center;
-    }
+
+body{
+font-family:Arial, sans-serif;
+background:#f4f6f9;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:#fff;
+padding:20px 30px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+color:#333;
+}
+
+label{
+display:block;
+margin:10px 0 5px;
+font-weight:bold;
+color:#444;
+}
+
+input[type="text"],
+input[type="number"],
+select{
+width:100%;
+padding:8px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:14px;
+}
+
+.stars{
+display:flex;
+gap:5px;
+margin-bottom:15px;
+}
+
+.star{
+font-size:28px;
+color:lightgray;
+cursor:pointer;
+transition:color 0.2s;
+}
+
+.star:hover,
+.star.selected{
+color:gold;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#007bff;
+border:none;
+border-radius:5px;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+ul{
+list-style:none;
+padding:0;
+}
+
+li{
+background:#f9f9f9;
+margin:8px 0;
+padding:10px;
+border-radius:5px;
+border:1px solid #ddd;
+}
+
+.rating-display{
+color:gold;
+font-size:20px;
+margin-left:5px;
+}
 
 </style>
 
+</head>
+
 <body>
-    <h1>
-        Add a Movie
-    </h1>
 
-    <form>
-        <label for="title">Title:</label><br></br>
-        <input type="text" id="title" name="title"><br></br>
-        <label for="year">Year:</label><br></br>
-        <input type="number" id="year" name="title"><br></br>
-        <label> Genre:
-            <select name="genre" id="genre">
-             <option value="action">Action</option>
-             <option value="comedy">Comedy</option>
-             <option value="drama">Drama</option>
-             <option value="romance">Romance</option>
-             <option value="horror">Horror</option>
-            </select>   
-        </label><br/><br/>
-        <div class="stars">
-            <span class="star" data-value="1">⭐</span>
-            <span class="star" data-value="2">⭐</span>
-            <span class="star" data-value="3">⭐</span>
-            <span class="star" data-value="4">⭐</span>
-            <span class="star" data-value="5">⭐</span>
-        </div>
-    </form>
-    <button type="submit">Add Movie</button>
-    <h2>
-        Movie List
-    </h2>
-    
-    
-    
+<div class="container">
 
+<h2>Add a Movie</h2>
+
+<label>Title:</label>
+<input type="text" id="title">
+
+<label>Year:</label>
+<input type="number" id="year">
+
+<label>Genre:</label>
+<select id="genre">
+<option value="Action">Action</option>
+<option value="Comedy">Comedy</option>
+<option value="Drama">Drama</option>
+<option value="Sci-Fi">Sci-Fi</option>
+</select>
+
+<label>Rating:</label>
+
+<div class="stars">
+
+<span class="star" data-value="1">&#9733;</span>
+<span class="star" data-value="2">&#9733;</span>
+<span class="star" data-value="3">&#9733;</span>
+<span class="star" data-value="4">&#9733;</span>
+<span class="star" data-value="5">&#9733;</span>
+
+</div>
+
+<button onclick="addMovie()">Add Movie</button>
+
+<h2>Movie List</h2>
+
+<ul id="movieList"></ul>
+
+</div>
+
+
+<script>
+
+let movies = [];
+let selectedRating = 0;
+
+document.querySelectorAll(".star").forEach(star => {
+
+star.addEventListener("click", function(){
+
+selectedRating = this.getAttribute("data-value");
+updateStars(selectedRating);
+
+});
+
+});
+
+function updateStars(rating){
+
+    document.querySelectorAll(".star").forEach(star =>{
+
+    star.classList.remove("selected");
+
+    if(star.getAttribute("data-value") <= rating){
+
+    star.classList.add("selected");
+
+}
+
+});
+
+}
+
+
+function addMovie(){
+
+let title=document.getElementById("title").value;
+let year=document.getElementById("year").value;
+let genre=document.getElementById("genre").value;
+
+if(title=="" || year=="" || selectedRating==0){
+    alert("Fill all fields");
+    return;
+}
+
+let existing = movies.find(m => m.title.toLowerCase() === title.toLowerCase());
+
+if(existing){
+
+    existing.year = year;
+    existing.genre = genre;
+    existing.rating = Math.round((existing.rating + selectedRating)/2);
+
+}else{
+
+    movies.push({
+    title:title,
+    year:year,
+    genre:genre,
+    rating:selectedRating
+});
+
+}
+
+displayMovies();
+
+document.getElementById("title").value="";
+document.getElementById("year").value="";
+selectedRating=0;
+updateStars(0);
+
+}
+
+function displayMovies(){
+
+    let list=document.getElementById("movieList");
+    list.innerHTML="";
+
+    movies.forEach((movie,index)=>{
+
+    let li=document.createElement("li");
+
+    let stars="★".repeat(movie.rating);
+
+    li.innerHTML =
+    movie.title+" ("+movie.year+") - "+
+    movie.genre+", Rating: "+
+    "<span class='rating-display'>"+stars+"</span>"+
+    " <button class='deleteBtn' onclick='deleteMovie("+index+")'>Delete</button>";
+
+    list.appendChild(li);
+
+});
+
+}
+
+function deleteMovie(index){
+
+    if(confirm("Are you sure you want to delete?")){
+
+    movies.splice(index,1);
+    displayMovies();
+
+}
+
+
+
+}
+
+</script>
 
 </body>
-
-
-
-
-
-
-
 </html>
